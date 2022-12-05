@@ -25,28 +25,27 @@ class router():
             src_endpoint.buffer.pop(0)
             dst_endpoint.buffer.append(out_packet)
 
-    def QoS_forwarding(src_endpoint, dst_endpoint, period, router):
-        sizeofpackets = len(src_endpoint.buffer)
-        for i in range(sizeofpackets):
-            out_packet = src_endpoint.buffer[0]
+    def QoS_queue_populating(packet, period, router):
             if period == 1:
-                match out_packet.type:
+                match packet.type:
                     case 'Sensor':
-                        router.first_priority.append(out_packet)
+                        router.first_priority.append(packet)
                     case 'VoIP':
-                        router.second_priority.append(out_packet)
+                        router.second_priority.append(packet)
                     case 'Employee':
-                        router.third_priority.append(out_packet)
+                        router.third_priority.append(packet)
                     case 'Cameras':
-                        router.fourth_priority.append(out_packet)
+                        router.fourth_priority.append(packet)
             elif period == 2:
                 match out_packet.type:
                     case 'Cameras':
-                        router.first_priority.append(out_packet)
+                        router.first_priority.append(packet)
                     case 'Sensor':
-                        router.second_priority.append(out_packet)
+                        router.second_priority.append(packet)
                     case 'VoIP':
-                        router.third_priority.append(out_packet)
+                        router.third_priority.append(packet)
                     case 'Employee':
-                        router.fourth_priority.append(out_packet)
-            src_endpoint.buffer.pop(0)
+                        router.fourth_priority.append(packet)
+
+    def QoS_forwarding(router):
+        print('Not implemented')

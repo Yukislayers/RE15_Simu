@@ -45,7 +45,10 @@ else:
     router_type = 2 #2 is for a router which has QoS implemented
     new_router = router(router_type)
 
-    router.QoS_forwarding(src_endpoint, dst_endpoint, int(period), new_router)
+    if len(src_endpoint.buffer) != 0:
+        for iter in range(len(src_endpoint.buffer)):
+            router.QoS_queue_populating(src_endpoint.buffer[0], int(period), new_router)
+            src_endpoint.buffer.pop(0)
 
     print('\nPacket in the first priority queue')
     if len(new_router.first_priority) != 0:
@@ -70,8 +73,8 @@ else:
 
     print('\nPacket in the fourth priority queue')
     if len(new_router.fourth_priority) != 0:
-        for iter in range(len(new_router.first_priority)):
-            print(f'{new_router.first_priority[iter].name} : {new_router.fourth_priority[iter].type} | src address: {new_router.fourth_priority[iter].src_a} | dst address: {new_router.fourth_priority[iter].src_dst} | priority: {new_router.fourth_priority[iter].priority} | data length: {new_router.fourth_priority[iter].taille} octets')
+        for iter in range(len(new_router.fourth_priority)):
+            print(f'{new_router.fourth_priority[iter].name} : {new_router.fourth_priority[iter].type} | src address: {new_router.fourth_priority[iter].src_a} | dst address: {new_router.fourth_priority[iter].src_dst} | priority: {new_router.fourth_priority[iter].priority} | data length: {new_router.fourth_priority[iter].taille} octets')
     else:
         print('There is no packet')
 
