@@ -37,7 +37,7 @@ class router():
                     case 'Cameras':
                         router.fourth_priority.append(packet)
             elif period == 2:
-                match out_packet.type:
+                match packet.type:
                     case 'Cameras':
                         router.first_priority.append(packet)
                     case 'Sensor':
@@ -47,5 +47,19 @@ class router():
                     case 'Employee':
                         router.fourth_priority.append(packet)
 
-    def QoS_forwarding(router):
-        print('Not implemented')
+    def QoS_forwarding(dst_endpoint, router):
+        if len(router.first_priority) != 0:
+            dst_endpoint.buffer.append(router.first_priority[0])
+            router.first_priority.pop(0)
+        elif len(router.second_priority) != 0:
+            dst_endpoint.buffer.append(router.second_priority[0])
+            router.second_priority.pop(0)
+        elif len(router.third_priority) != 0:
+            dst_endpoint.buffer.append(router.third_priority[0])
+            router.third_priority.pop(0)
+        elif len(router.fourth_priority) != 0:
+            dst_endpoint.buffer.append(router.fourth_priority[0])
+            router.fourth_priority.pop(0)
+
+
+        

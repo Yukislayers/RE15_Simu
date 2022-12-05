@@ -45,11 +45,26 @@ else:
     router_type = 2 #2 is for a router which has QoS implemented
     new_router = router(router_type)
 
-    if len(src_endpoint.buffer) != 0:
-        for iter in range(len(src_endpoint.buffer)):
-            router.QoS_queue_populating(src_endpoint.buffer[0], int(period), new_router)
-            src_endpoint.buffer.pop(0)
+    while (len(src_endpoint.buffer)) != 0 and (len(src_endpoint.buffer)) > 1:
+        #print('in the while loop')
+        router.QoS_queue_populating(src_endpoint.buffer[0], int(period), new_router)
+        src_endpoint.buffer.pop(0)
+        router.QoS_queue_populating(src_endpoint.buffer[0], int(period), new_router)
+        src_endpoint.buffer.pop(0)
+        router.QoS_forwarding(dst_endpoint, new_router)
 
+    while len(new_router.first_priority) != 0 or len(new_router.second_priority) != 0 or len(new_router.third_priority) != 0 or len(new_router.fourth_priority) != 0:
+        router.QoS_forwarding(dst_endpoint, new_router)
+
+
+    sizeOfDestBuffer = len(dst_endpoint.buffer)
+    #print(sizeOfDestBuffer)
+
+    print('\nThe order of arrival of the previous packet in the second equipment is :')
+    for iter in range(sizeOfDestBuffer):
+        print(f'{dst_endpoint.buffer[iter].name} : {dst_endpoint.buffer[iter].type} | src address: {dst_endpoint.buffer[iter].src_a} | dst address: {dst_endpoint.buffer[iter].src_dst} | priority: {dst_endpoint.buffer[iter].priority} | data length: {dst_endpoint.buffer[iter].taille} octets')
+
+'''
     print('\nPacket in the first priority queue')
     if len(new_router.first_priority) != 0:
         for iter in range(len(new_router.first_priority)):
@@ -77,6 +92,7 @@ else:
             print(f'{new_router.fourth_priority[iter].name} : {new_router.fourth_priority[iter].type} | src address: {new_router.fourth_priority[iter].src_a} | dst address: {new_router.fourth_priority[iter].src_dst} | priority: {new_router.fourth_priority[iter].priority} | data length: {new_router.fourth_priority[iter].taille} octets')
     else:
         print('There is no packet')
+'''
 
 '''
 for iter in range(sizeofpacket_list):
