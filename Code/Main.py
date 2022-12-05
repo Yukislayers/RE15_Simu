@@ -52,7 +52,11 @@ else:
         router.QoS_queue_populating(src_endpoint.buffer[0], int(period), new_router)
         src_endpoint.buffer.pop(0)
         router.QoS_forwarding(dst_endpoint, new_router)
-
+    else:
+        router.QoS_queue_populating(src_endpoint.buffer[0], int(period), new_router)
+        src_endpoint.buffer.pop(0)
+        router.QoS_forwarding(dst_endpoint, new_router)
+        
     while len(new_router.first_priority) != 0 or len(new_router.second_priority) != 0 or len(new_router.third_priority) != 0 or len(new_router.fourth_priority) != 0:
         router.QoS_forwarding(dst_endpoint, new_router)
 
