@@ -6,22 +6,42 @@ class packet:
     name = ''
     src_a = ''
     src_dst = ''
+    type = ''
     priority = 0
     taille = 0
 
-def genPacket(n, src_a, src_dest):
+def genPacket(n, src_a, src_dest, period):
     packets_list = []
     for i in range(n):
         prio = random.randrange(0, 4)
         data = random.randrange(0, 255)
-        test = packet()
-        test.name = 'packet' + str(i)
-        test.src_a = src_a
-        test.src_dst = src_dest
-        test.priority = prio
-        test.taille = data
-        #print(f'{test.name} has for src address {test.src_a} and dst address {test.src_dst} and prio {test.priority} and data length {test.taille} octets')
-        packets_list.append(test)
+        new_packet = packet()
+        new_packet.name = 'packet' + str(i)
+        new_packet.src_a = src_a
+        new_packet.src_dst = src_dest
+        new_packet.priority = prio
+        new_packet.taille = data
+        if (period == 1):
+            match prio:
+                case 0:
+                    new_packet.type = 'Sensor'
+                case 1:
+                    new_packet.type = 'VoIP'
+                case 2:
+                    new_packet.type = 'Employee'
+                case 3:
+                    new_packet.type = 'Cameras'
+        elif period == 2:
+            match prio:
+                case 0:
+                    new_packet.type = 'Cameras'
+                case 1:
+                    new_packet.type = 'Sensor'
+                case 2:
+                    new_packet.type = 'VoIP'
+                case 3:
+                    new_packet.type = 'Employee'
+        packets_list.append(new_packet)
     else:
         print(f'{n} packets have been generated')
     return packets_list

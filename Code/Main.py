@@ -1,5 +1,5 @@
-import Packet
-import Routeur
+from Packet import *
+from Router import *
 from Endpoint import *
 
 
@@ -14,9 +14,61 @@ print(f'We are going to send packet from {src_endpoint.ip_address} to {dst_endpo
 quantity = input('How much packet do you want to generate ? ')
 #print(quantity)
 
-packet_list = Packet.genPacket(int(quantity), src_endpoint.ip_address, dst_endpoint.ip_address)
-sizeofpacket_list = len(packet_list)
-print(sizeofpacket_list)
+period = input('Do you want to simulate for the day (1) or the night (2) ? ')
+#print(period)
+
+QoS = input('Do you want to simulate QoS: Yes or No ? ')
+#print(QoS.lower())
+
+#Packet generation
+src_endpoint.buffer = genPacket(int(quantity), src_endpoint.ip_address, dst_endpoint.ip_address, int(period))
+sizeofpacket_list = len(src_endpoint.buffer)
 
 for iter in range(sizeofpacket_list):
-    print(f'{packet_list[iter].name} has for src address {packet_list[iter].src_a} and dst address {packet_list[iter].src_dst} and prio {packet_list[iter].priority} and data length {packet_list[iter].taille} octets')
+        print(f'{src_endpoint.buffer[iter].name} : {src_endpoint.buffer[iter].type} | src address: {src_endpoint.buffer[iter].src_a} | dst address: {src_endpoint.buffer[iter].src_dst} | priority: {src_endpoint.buffer[iter].priority} | data length: {src_endpoint.buffer[iter].taille} octets')
+
+if QoS.lower() == 'no':
+    router_type = 1 #1 is for a router which has only 1 queue
+    new_router = router(router_type)
+    #print(new_router.type)
+ 
+    router.no_QoS_forwarding(src_endpoint, dst_endpoint)
+
+    sizeOfDestBuffer = len(dst_endpoint.buffer)
+    #print(sizeOfDestBuffer)
+
+    print('\nThe order of arrival of the previous packet in the second equipment is :')
+    for iter in range(sizeOfDestBuffer):
+        print(f'{dst_endpoint.buffer[iter].name} : {dst_endpoint.buffer[iter].type} | src address: {dst_endpoint.buffer[iter].src_a} | dst address: {dst_endpoint.buffer[iter].src_dst} | priority: {dst_endpoint.buffer[iter].priority} | data length: {dst_endpoint.buffer[iter].taille} octets')
+
+else:
+    router_type = 2 #2 is for a router which has QoS implemented
+    new_router = router(router_type)
+
+    router.QoS_forwarding(src_endpoint, dst_endpoint, int(period), new_router)
+
+    print('\nPacket in the first priority queue')
+    if len(new_router.first_priority) != 0:
+        for iter in range(len(new_router.first_priority)):
+            print(f'{new_router.first_priority[iter].name} : {new_router.first_priority[iter].type} | src address: {new_router.first_priority[iter].src_a} | dst address: {new_router.first_priority[iter].src_dst} | priority: {new_router.first_priority[iter].priority} | data length: {new_router.first_priority[iter].taille} octets')
+
+    print('\nPacket in the second priority queue')
+    if len(new_router.second_priority) != 0:
+        for iter in range(len(new_router.second_priority)):
+            print(f'{new_router.second_priority[iter].name} : {new_router.second_priority[iter].type} | src address: {new_router.second_priority[iter].src_a} | dst address: {new_router.second_priority[iter].src_dst} | priority: {new_router.second_priority[iter].priority} | data length: {new_router.second_priority[iter].taille} octets')
+    
+    print('\nPacket in the third priority queue')
+    if len(new_router.third_priority) != 0:
+        for iter in range(len(new_router.third_priority)):
+            print(f'{new_router.third_priority[iter].name} : {new_router.third_priority[iter].type} | src address: {new_router.third_priority[iter].src_a} | dst address: {new_router.third_priority[iter].src_dst} | priority: {new_router.third_priority[iter].priority} | data length: {new_router.third_priority[iter].taille} octets')
+    
+    print('\nPacket in the fourth priority queue')
+    if len(new_router.fourth_priority) != 0:
+        for iter in range(len(new_router.first_priority)):
+            print(f'{new_router.first_priority[iter].name} : {new_router.fourth_priority[iter].type} | src address: {new_router.fourth_priority[iter].src_a} | dst address: {new_router.fourth_priority[iter].src_dst} | priority: {new_router.fourth_priority[iter].priority} | data length: {new_router.fourth_priority[iter].taille} octets')
+
+
+'''
+for iter in range(sizeofpacket_list):
+        print(f'{src_endpoint.buffer[iter].name} : {src_endpoint.buffer[iter].type} | src address: {src_endpoint.buffer[iter].src_a} | dst address: {src_endpoint.buffer[iter].src_dst} | priority: {src_endpoint.buffer[iter].priority} | data length: {src_endpoint.buffer[iter].taille} octets')
+'''
