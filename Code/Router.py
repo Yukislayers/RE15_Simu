@@ -61,5 +61,32 @@ class router():
             dst_endpoint.buffer.append(router.fourth_priority[0])
             router.fourth_priority.pop(0)
 
+    def show_queue(new_router):
+        print('\nPacket in the first priority queue')
+        if len(new_router.first_priority) != 0:
+            for iter in range(len(new_router.first_priority)):
+                print(f'{new_router.first_priority[iter].name} : {new_router.first_priority[iter].type} | src address: {new_router.first_priority[iter].src_a} | dst address: {new_router.first_priority[iter].src_dst} | priority: {new_router.first_priority[iter].priority} | data length: {new_router.first_priority[iter].taille} octets')
+        else:
+            print('There is no packet')
 
+        print('\nPacket in the second priority queue')
+        if len(new_router.second_priority) != 0:
+            for iter in range(len(new_router.second_priority)):
+                print(f'{new_router.second_priority[iter].name} : {new_router.second_priority[iter].type} | src address: {new_router.second_priority[iter].src_a} | dst address: {new_router.second_priority[iter].src_dst} | priority: {new_router.second_priority[iter].priority} | data length: {new_router.second_priority[iter].taille} octets')
+        else:
+            print('There is no packet')
+
+        print('\nPacket in the third priority queue')
+        if len(new_router.third_priority) != 0:
+            for iter in range(len(new_router.third_priority)):
+                print(f'{new_router.third_priority[iter].name} : {new_router.third_priority[iter].type} | src address: {new_router.third_priority[iter].src_a} | dst address: {new_router.third_priority[iter].src_dst} | priority: {new_router.third_priority[iter].priority} | data length: {new_router.third_priority[iter].taille} octets')
+        else:
+            print('There is no packet')
+
+        print('\nPacket in the fourth priority queue')
+        if len(new_router.fourth_priority) != 0:
+            for iter in range(len(new_router.fourth_priority)):
+                print(f'{new_router.fourth_priority[iter].name} : {new_router.fourth_priority[iter].type} | src address: {new_router.fourth_priority[iter].src_a} | dst address: {new_router.fourth_priority[iter].src_dst} | priority: {new_router.fourth_priority[iter].priority} | data length: {new_router.fourth_priority[iter].taille} octets')
+        else:
+            print('There is no packet')
         
