@@ -7,17 +7,15 @@ class router():
     def __init__(self, type):
         self.type = type
 
-    prio_resend_queue = []
-
     first_priority = []
     second_priority = []
     third_priority = []
     fourth_priority = []
 
-    size_of_first_priority = 0
-    size_of_second_priority = 0
-    size_of_third_priority = 0
-    size_of_fourth_priority = 0
+    size_of_first_priority = 100
+    size_of_second_priority = 100
+    size_of_third_priority = 100
+    size_of_fourth_priority = 100
 
     def no_QoS_forwarding(src_endpoint, dst_endpoint):
         #print('I am in No QoS forwarding function')
@@ -30,7 +28,7 @@ class router():
             src_endpoint.buffer.pop(0)
             dst_endpoint.buffer.append(out_packet)
 
-    def QoS_queue_populating(packet, period, router):
+    def QoS_queue_populating(packet, period, router, src):
             if period == 1:
                 match packet.type:
                     case 'Sensor':
@@ -38,25 +36,25 @@ class router():
                             router.first_priority.append(packet)
                         else:
                             print(f'{packet.name} of type : {packet.type} have been dropped')
-                            router.prio_resend_queue.append(packet)
+                            src.resend_buffer.append(packet)
                     case 'VoIP':
                         if len(router.second_priority) <= (router.size_of_second_priority - 1):
                             router.second_priority.append(packet)
                         else:
                             print(f'{packet.name} of type : {packet.type} have been dropped')
-                            router.prio_resend_queue.append(packet)
+                            src.resend_buffer.append(packet)
                     case 'Employee':
                         if len(router.third_priority) <= (router.size_of_third_priority - 1):
                             router.third_priority.append(packet)
                         else:
                             print(f'{packet.name} of type : {packet.type} have been dropped')
-                            router.prio_resend_queue.append(packet)
+                            src.resend_buffer.append(packet)
                     case 'Cameras':
                         if len(router.fourth_priority) <= (router.size_of_fourth_priority - 1):
                             router.fourth_priority.append(packet)
                         else:
                             print(f'{packet.name} of type : {packet.type} have been dropped')
-                            router.prio_resend_queue.append(packet)
+                            src.resend_buffer.append(packet)
             elif period == 2:
                 match packet.type:
                     case 'Cameras':
@@ -64,25 +62,25 @@ class router():
                             router.first_priority.append(packet)
                         else:
                             print(f'{packet.name} of type : {packet.type} have been dropped')
-                            router.prio_resend_queue.append(packet)
+                            src.resend_buffer.append(packet)
                     case 'Sensor':
                         if len(router.second_priority) <= (router.size_of_second_priority - 1):
                             router.second_priority.append(packet)
                         else:
                             print(f'{packet.name} of type : {packet.type} have been dropped')
-                            router.prio_resend_queue.append(packet)
+                            src.resend_buffer.append(packet)
                     case 'VoIP':
                         if len(router.third_priority) <= (router.size_of_third_priority - 1):
                             router.third_priority.append(packet)
                         else:
                             print(f'{packet.name} of type : {packet.type} have been dropped')
-                            router.prio_resend_queue.append(packet)
+                            src.resend_buffer.append(packet)
                     case 'Employee':
                         if len(router.fourth_priority) <= (router.size_of_fourth_priority - 1):
                             router.fourth_priority.append(packet)
                         else:
                             print(f'{packet.name} of type : {packet.type} have been dropped')
-                            router.prio_resend_queue.append(packet)
+                            src.resend_buffer.append(packet)
 
     def QoS_forwarding(dst_endpoint, router):
         if len(router.first_priority) != 0:
@@ -97,10 +95,6 @@ class router():
         elif len(router.fourth_priority) != 0:
             dst_endpoint.buffer.append(router.fourth_priority[0])
             router.fourth_priority.pop(0)
-        elif len(router.prio_resend_queue) != 0:
-            dst_endpoint.buffer.append(router.prio_resend_queue[0])
-            router.prio_resend_queue.pop(0)
-
 
     def show_queue(new_router):
         print('\nPacket in the first priority queue')

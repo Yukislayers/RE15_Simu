@@ -62,7 +62,7 @@ else:
             print('\n--------------------------------------------------------------------')
 
             for iter in range(entry_rate):
-                router.QoS_queue_populating(src_endpoint.buffer[0], int(period), new_router)
+                router.QoS_queue_populating(src_endpoint.buffer[0], int(period), new_router, src_endpoint)
                 src_endpoint.buffer.pop(0)
             
             router.show_queue(new_router)
@@ -77,7 +77,7 @@ else:
 
             print('\n--------------------------------------------------------------------')
             for iter in range(len(src_endpoint.buffer)):
-                router.QoS_queue_populating(src_endpoint.buffer[0], int(period), new_router)
+                router.QoS_queue_populating(src_endpoint.buffer[0], int(period), new_router, src_endpoint)
                 src_endpoint.buffer.pop(0)
 
             router.show_queue(new_router)
@@ -114,7 +114,7 @@ else:
                 print('\n--------------------------------------------------------------------')
 
                 for iter in range(entry_rate):
-                    router.QoS_queue_populating(src_endpoint.buffer[0], int(period), new_router)
+                    router.QoS_queue_populating(src_endpoint.buffer[0], int(period), new_router, src_endpoint)
                     src_endpoint.buffer.pop(0)
                 
                 router.show_queue(new_router)
@@ -133,7 +133,7 @@ else:
 
                 print('\n--------------------------------------------------------------------')
                 for iter in range(len(src_endpoint.buffer)):
-                    router.QoS_queue_populating(src_endpoint.buffer[0], int(period), new_router)
+                    router.QoS_queue_populating(src_endpoint.buffer[0], int(period), new_router, src_endpoint)
                     src_endpoint.buffer.pop(0)
 
                 router.show_queue(new_router)
@@ -146,22 +146,24 @@ else:
 
                 print('\nAt this point, the destination buffer is composed of')
                 dst_endpoint.show_buffer(dst_endpoint)
-                
+
+
             print('\nWe resend the packets that have been dropped')
 
             #resend packet that have been dropped
-            while len(new_router.prio_resend_queue) != 0:
-                if len(new_router.prio_resend_queue) <= entry_rate:
-                    delta = len(new_router.prio_resend_queue)
+            while len(src_endpoint.resend_buffer) != 0:
+                if len(src_endpoint.resend_buffer) <= entry_rate:
+                    delta = len(src_endpoint.resend_buffer)
                 else:
                     delta = entry_rate
 
                 for iter in range(delta):
-                    router.QoS_queue_populating(new_router.prio_resend_queue[0], int(period), new_router)
-                    new_router.prio_resend_queue.pop(0)
+                    router.QoS_queue_populating(src_endpoint.resend_buffer[0], int(period), new_router, src_endpoint)
+                    src_endpoint.resend_buffer.pop(0)
 
                 for iter2 in range(output_rate):
                     router.QoS_forwarding(dst_endpoint, new_router)
+
 
             while len(new_router.first_priority) != 0 or len(new_router.second_priority) != 0 or len(new_router.third_priority) != 0 or len(new_router.fourth_priority) != 0:
                 router.QoS_forwarding(dst_endpoint, new_router)
@@ -199,7 +201,7 @@ else:
                 print('\n--------------------------------------------------------------------')
 
                 for iter in range(entry_rate):
-                    router.QoS_queue_populating(src_endpoint.buffer[0], int(period), new_router)
+                    router.QoS_queue_populating(src_endpoint.buffer[0], int(period), new_router, src_endpoint)
                     src_endpoint.buffer.pop(0)
             
                 router.show_queue(new_router)
@@ -218,7 +220,7 @@ else:
 
                 print('\n--------------------------------------------------------------------')
                 for iter in range(len(src_endpoint.buffer)):
-                    router.QoS_queue_populating(src_endpoint.buffer[0], int(period), new_router)
+                    router.QoS_queue_populating(src_endpoint.buffer[0], int(period), new_router, src_endpoint)
                     src_endpoint.buffer.pop(0)
 
                 router.show_queue(new_router)
@@ -232,22 +234,24 @@ else:
 
                 print('\nAt this point, the destination buffer is composed of')
                 dst_endpoint.show_buffer(dst_endpoint)
-                
+
+
             print('\nWe resend the packets that have been dropped')
 
             #resend packet that have been dropped
-            while len(new_router.prio_resend_queue) != 0:
-                if len(new_router.prio_resend_queue) <= entry_rate:
-                    delta = len(new_router.prio_resend_queue)
+            while len(src_endpoint.resend_buffer) != 0:
+                if len(src_endpoint.resend_buffer) <= entry_rate:
+                    delta = len(src_endpoint.resend_buffer)
                 else:
                     delta = entry_rate
 
                 for iter in range(delta):
-                    router.QoS_queue_populating(new_router.prio_resend_queue[0], int(period), new_router)
-                    new_router.prio_resend_queue.pop(0)
+                    router.QoS_queue_populating(src_endpoint.resend_buffer[0], int(period), new_router, src_endpoint)
+                    src_endpoint.resend_buffer.pop(0)
 
                 for iter2 in range(output_rate):
                     router.QoS_forwarding(dst_endpoint, new_router)
+
 
             while len(new_router.first_priority) != 0 or len(new_router.second_priority) != 0 or len(new_router.third_priority) != 0 or len(new_router.fourth_priority) != 0:
                 router.QoS_forwarding(dst_endpoint, new_router)

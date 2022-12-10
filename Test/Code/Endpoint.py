@@ -4,6 +4,7 @@ class endpoint:
     def __init__(self, ip_address):
         self.ip_address = ip_address
     buffer = []
+    resend_buffer = []
 
     def show_buffer(self, equipment):
         sizeofbuffer = len(equipment.buffer)
