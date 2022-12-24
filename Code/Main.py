@@ -92,3 +92,5 @@ else:
     print('\n--------------------------------------------------------------------')
     print('The order of arrival of the previous packet in the second equipment is :')
     dst_endpoint.show_buffer(dst_endpoint)
+
+    print('\nEnd of the simulation !')
