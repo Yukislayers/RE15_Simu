@@ -1,6 +1,7 @@
 from Packet import *
 from Router import *
 from Endpoint import *
+import time
 
 
 src_endpoint = endpoint('192.168.1.1')
@@ -122,6 +123,7 @@ else:
                 if router.check_congestion(new_router):
                     while len(new_router.first_priority) != 0 or len(new_router.second_priority) != 0 or len(new_router.third_priority) != 0 or len(new_router.fourth_priority) != 0:
                         router.QoS_forwarding(dst_endpoint, new_router)
+                        time.sleep(2)
                 else:
                     for iter2 in range(output_rate):
                         router.QoS_forwarding(dst_endpoint, new_router)
@@ -140,6 +142,7 @@ else:
                 if router.check_congestion(new_router):
                     while len(new_router.first_priority) != 0 or len(new_router.second_priority) != 0 or len(new_router.third_priority) != 0 or len(new_router.fourth_priority) != 0:
                         router.QoS_forwarding(dst_endpoint, new_router)
+                        time.sleep(2)
                 else:
                     for iter2 in range(output_rate):
                         router.QoS_forwarding(dst_endpoint, new_router)
@@ -209,6 +212,7 @@ else:
                 if router.check_congestion(new_router):
                     while len(new_router.first_priority) != 0 or len(new_router.second_priority) != 0 or len(new_router.third_priority) != 0 or len(new_router.fourth_priority) != 0:
                         router.QoS_forwarding(dst_endpoint, new_router)
+                        time.sleep(2)
                 else:
                     for iter2 in range(output_rate):
                         router.QoS_forwarding(dst_endpoint, new_router)
@@ -228,6 +232,7 @@ else:
                 if router.check_congestion(new_router):
                     while len(new_router.first_priority) != 0 or len(new_router.second_priority) != 0 or len(new_router.third_priority) != 0 or len(new_router.fourth_priority) != 0:
                         router.QoS_forwarding(dst_endpoint, new_router)
+                        time.sleep(2)
                 else:
                     for iter2 in range(output_rate):
                         router.QoS_forwarding(dst_endpoint, new_router)
